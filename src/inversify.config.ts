@@ -28,6 +28,7 @@ import Clear from './commands/clear';
 import Config from './commands/config';
 import Disconnect from './commands/disconnect';
 import ForwardSeek from './commands/fseek';
+import FullShuffle from './commands/fshuffle';
 import Help from './commands/help';
 import Loop from './commands/loop';
 import LoopQueue from './commands/loopq';
@@ -59,6 +60,7 @@ container.bind<NaturalLanguage>(TYPES.Services.NaturalLanguage).to(NaturalLangua
   Config,
   Disconnect,
   ForwardSeek,
+  FullShuffle,
   Help,
   Loop,
   LoopQueue,

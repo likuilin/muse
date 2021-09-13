@@ -7,10 +7,10 @@ import Command from '.';
 
 @injectable()
 export default class implements Command {
-  public name = 'shuffle';
-  public aliases = [];
+  public name = 'fullshuffle';
+  public aliases = ['fshuffle'];
   public examples = [
-    ['shuffle', 'shuffles the current queue']
+    ['fullshuffle', 'shuffles the entire queue, including already-played and current songs, and re-starts at top of queue']
   ];
 
   public requiresVC = true;
@@ -29,7 +29,7 @@ export default class implements Command {
       return;
     }
 
-    await player.shuffle(false);
+    await player.shuffle(true);
 
     await msg.channel.send('shuffled');
   }

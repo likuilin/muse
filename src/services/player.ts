@@ -242,10 +242,14 @@ export default class {
     }
   }
 
-  shuffle(): void {
-    const shuffledSongs = shuffle(this.queue.slice(this.queuePosition + 1));
-
-    this.queue = [...this.queue.slice(0, this.queuePosition + 1), ...shuffledSongs];
+  async shuffle(full: boolean): Promise<void> {
+    if (full) {
+      this.queue = shuffle(this.queue);
+      await this.forward(1 - this.queuePosition);
+    } else {
+      const shuffledSongs = shuffle(this.queue.slice(this.queuePosition + 1));
+      this.queue = [...this.queue.slice(0, this.queuePosition + 1), ...shuffledSongs];
+    }
   }
 
   clear(): void {
