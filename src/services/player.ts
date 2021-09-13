@@ -370,6 +370,7 @@ export default class {
     return new Promise((resolve, reject) => {
       const youtubeStream = ffmpeg(ffmpegInput)
         .inputOptions(ffmpegInputOptions)
+        .audioFilter('loudnorm')
         .noVideo()
         .audioCodec('libopus')
         .outputFormat('webm')
