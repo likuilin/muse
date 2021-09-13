@@ -22,13 +22,15 @@ import PlayerManager from './managers/player';
 import GetSongs from './services/get-songs';
 import NaturalLanguage from './services/natural-language-commands';
 
-// Comands
+// Commands
 import Command from './commands';
 import Clear from './commands/clear';
 import Config from './commands/config';
 import Disconnect from './commands/disconnect';
 import ForwardSeek from './commands/fseek';
 import Help from './commands/help';
+import Loop from './commands/loop';
+import LoopQueue from './commands/loopq';
 import Pause from './commands/pause';
 import Play from './commands/play';
 import QueueCommad from './commands/queue';
@@ -58,6 +60,8 @@ container.bind<NaturalLanguage>(TYPES.Services.NaturalLanguage).to(NaturalLangua
   Disconnect,
   ForwardSeek,
   Help,
+  Loop,
+  LoopQueue,
   Pause,
   Play,
   QueueCommad,

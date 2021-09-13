@@ -30,6 +30,8 @@ export enum STATUS {
 export default class {
   public status = STATUS.PAUSED;
   public voiceConnection: VoiceConnection | null = null;
+  public songLoop = false;
+  public queueLoop = false;
   private queue: QueuedSong[] = [];
   private queuePosition = 0;
   private readonly cacheDir: string;
@@ -166,6 +168,9 @@ export default class {
 
     try {
       if (this.getCurrent() && this.status !== STATUS.PAUSED) {
+        await this.play();
+      } else if (this.queueLoop) {
+        this.queuePosition = 0;
         await this.play();
       } else {
         this.status = STATUS.PAUSED;
@@ -440,7 +445,12 @@ export default class {
   private async onVoiceConnectionSpeaking(isSpeaking: boolean): Promise<void> {
     // Automatically advance queued song at end
     if (!isSpeaking && this.status === STATUS.PLAYING) {
-      await this.forward(1);
+      if (this.songLoop) {
+        this.positionInSeconds = 0;
+        await this.play();
+      } else {
+        await this.forward(1);
+      }
     }
   }
 }
