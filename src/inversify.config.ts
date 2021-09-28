@@ -32,6 +32,7 @@ import FullShuffle from './commands/fshuffle';
 import Help from './commands/help';
 import Loop from './commands/loop';
 import LoopQueue from './commands/loopq';
+import NowPlaying from './commands/nowplaying';
 import Pause from './commands/pause';
 import Play from './commands/play';
 import QueueCommad from './commands/queue';
@@ -64,6 +65,7 @@ container.bind<NaturalLanguage>(TYPES.Services.NaturalLanguage).to(NaturalLangua
   Help,
   Loop,
   LoopQueue,
+  NowPlaying,
   Pause,
   Play,
   QueueCommad,

@@ -9,15 +9,12 @@ import errorMsg from '../utils/error-msg';
 import {prettyTime} from '../utils/time';
 import getYouTubeID from 'get-youtube-id';
 
-const PAGE_SIZE = 10;
-
 @injectable()
 export default class implements Command {
-  public name = 'queue';
-  public aliases = ['q'];
+  public name = 'nowplaying';
+  public aliases = ['np'];
   public examples = [
-    ['queue', 'shows current queue'],
-    ['queue 2', 'shows second page of queue']
+    ['np', 'shows current song']
   ];
 
   private readonly playerManager: PlayerManager;
@@ -32,16 +29,6 @@ export default class implements Command {
     const currentlyPlaying = player.getCurrent();
 
     if (currentlyPlaying) {
-      const queueSize = player.queueSize();
-      const queuePage = args[0] ? parseInt(args[0], 10) : 1;
-
-      const maxQueuePage = Math.ceil((queueSize + 1) / PAGE_SIZE);
-
-      if (queuePage > maxQueuePage) {
-        await msg.channel.send(errorMsg('the queue isn\'t that big'));
-        return;
-      }
-
       const embed = new MessageEmbed();
 
       embed.setTitle(currentlyPlaying.title);
@@ -55,26 +42,12 @@ export default class implements Command {
       description += ' 🔉';
       if (player.songLoop) description += ' 🔂';
       if (player.queueLoop) description += ' 🔁';
-      description += player.isQueueEmpty() ? '' : '\n\n**Next up:**';
 
       embed.setDescription(description);
 
       let footer = `Source: ${currentlyPlaying.artist}`;
 
-      if (currentlyPlaying.playlist) {
-        footer += ` (${currentlyPlaying.playlist.title})`;
-      }
-
       embed.setFooter(footer);
-
-      const queuePageBegin = (queuePage - 1) * PAGE_SIZE;
-      const queuePageEnd = queuePageBegin + PAGE_SIZE;
-
-      player.getQueue().slice(queuePageBegin, queuePageEnd).forEach((song, i) => {
-        embed.addField(`${(i + 1 + queuePageBegin).toString()}/${queueSize.toString()}`, song.title, false);
-      });
-
-      embed.addField('Page', `${queuePage} out of ${maxQueuePage}`, false);
 
       await msg.channel.send(embed);
     } else {
