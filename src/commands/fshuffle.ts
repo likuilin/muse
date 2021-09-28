@@ -31,6 +31,6 @@ export default class implements Command {
 
     await player.shuffle(true);
 
-    await msg.channel.send('shuffled');
+    await msg.channel.send('full shuffled');
   }
 }
