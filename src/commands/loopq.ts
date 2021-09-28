@@ -24,6 +24,8 @@ export default class implements Command {
     const player = this.playerManager.get(msg.guild!.id);
 
     player.queueLoop = !player.queueLoop;
-    await msg.channel.send('the stop-and-go light (for looping the queue) is now ' + (player.queueLoop ? 'green' : 'red'));
+    player.songLoop = false;
+    if (player.queueLoop) await msg.channel.send('the wheels on the queue go round n\' round');
+    else await msg.channel.send('last stop! everyone out');
   }
 }

@@ -9,7 +9,7 @@ export default class implements Command {
   public name = 'loop';
   public aliases = [];
   public examples = [
-    ['loop', 'toggles looping one song instead of using queue']
+    ['loop', 'toggles looping one song']
   ];
 
   public requiresVC = true;
@@ -24,6 +24,8 @@ export default class implements Command {
     const player = this.playerManager.get(msg.guild!.id);
 
     player.songLoop = !player.songLoop;
-    await msg.channel.send('the stop-and-go light (for looping the song) is now ' + (player.songLoop ? 'green' : 'red'));
+    player.queueLoop = false;
+    if (player.songLoop) await msg.channel.send('spin your pardner round n\' round');
+    else await msg.channel.send('let \'er down loosely');
   }
 }
