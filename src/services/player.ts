@@ -266,6 +266,15 @@ export default class {
     this.queue = newQueue;
   }
 
+  reset(): void {
+    if (this.voiceConnection) {
+      this.voiceConnection.disconnect();
+    }
+
+    this.queuePosition = 0;
+    this.queue = [];
+  }
+
   removeCurrent(): void {
     this.queue = [...this.queue.slice(0, this.queuePosition), ...this.queue.slice(this.queuePosition + 1)];
   }
