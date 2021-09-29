@@ -3,6 +3,7 @@ import {TYPES} from '../types';
 import {inject, injectable} from 'inversify';
 import PlayerManager from '../managers/player';
 import {STATUS} from '../services/player';
+import Player from '../services/player';
 import Command from '.';
 import getProgressBar from '../utils/get-progress-bar';
 import errorMsg from '../utils/error-msg';
@@ -10,7 +11,7 @@ import {prettyTime} from '../utils/time';
 import getYouTubeID from 'get-youtube-id';
 
 @injectable()
-export default class implements Command {
+export default class NowPlaying implements Command {
   public name = 'nowplaying';
   public aliases = ['np'];
   public examples = [
@@ -26,6 +27,10 @@ export default class implements Command {
   public async execute(msg: Message, args: string []): Promise<void> {
     const player = this.playerManager.get(msg.guild!.id);
 
+    await msg.channel.send(NowPlaying.buildRadio(player));
+  }
+
+  public static buildRadio(player: Player) {
     const currentlyPlaying = player.getCurrent();
 
     if (currentlyPlaying) {
@@ -49,9 +54,9 @@ export default class implements Command {
 
       embed.setFooter(footer);
 
-      await msg.channel.send(embed);
+      return embed;
     } else {
-      await msg.channel.send('no thoughts, queue empty');
+      return 'no thoughts, queue empty';
     }
   }
 }

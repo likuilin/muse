@@ -1,4 +1,4 @@
-import {VoiceConnection, VoiceChannel, StreamDispatcher} from 'discord.js';
+import {TextChannel, VoiceConnection, VoiceChannel, StreamDispatcher} from 'discord.js';
 import {promises as fs, createWriteStream} from 'fs';
 import {Readable, PassThrough} from 'stream';
 import path from 'path';
@@ -30,6 +30,7 @@ export enum STATUS {
 export default class {
   public status = STATUS.PAUSED;
   public voiceConnection: VoiceConnection | null = null;
+  public scrobbleAnnounce: (() => void) | null = null;
   public songLoop = false;
   public queueLoop = false;
   private queue: QueuedSong[] = [];
@@ -431,6 +432,7 @@ export default class {
   }
 
   private startTrackingPosition(initalPosition?: number): void {
+    if (this.scrobbleAnnounce) this.scrobbleAnnounce();
     if (initalPosition !== undefined) {
       this.positionInSeconds = initalPosition;
     }
