@@ -24,11 +24,6 @@ export default class implements Command {
   public async execute(msg: Message, _: string []): Promise<void> {
     const player = this.playerManager.get(msg.guild!.id);
 
-    if (player.isQueueEmpty()) {
-      await msg.channel.send(errorMsg('not enough songs to shuffle'));
-      return;
-    }
-
     await player.shuffle(true);
 
     await msg.channel.send('full shuffled');

@@ -245,7 +245,19 @@ export default class {
   async shuffle(full: boolean): Promise<void> {
     if (full) {
       this.queue = shuffle(this.queue);
-      await this.forward(1 - this.queuePosition);
+
+      this.queuePosition = 0;
+      this.positionInSeconds = 0;
+      this.stopTrackingPosition();
+
+      try {
+        if (this.getCurrent() && this.status !== STATUS.PAUSED) {
+          await this.play();
+        }
+      } catch (error: unknown) {
+        throw error;
+      }
+
     } else {
       const shuffledSongs = shuffle(this.queue.slice(this.queuePosition + 1));
       this.queue = [...this.queue.slice(0, this.queuePosition + 1), ...shuffledSongs];
