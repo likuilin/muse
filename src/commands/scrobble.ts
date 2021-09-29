@@ -28,9 +28,10 @@ export default class implements Command {
       player.scrobbleAnnounce = null;
       await msg.channel.send('forget what you\'ve listened to');
     } else {
-      player.scrobbleAnnounce = () => {
-        msg.channel.send(NowPlaying.buildRadio(player));
+      player.scrobbleAnnounce = async () => {
+        await msg.channel.send(NowPlaying.buildRadio(player));
       };
+
       await msg.channel.send('dontcha forget what you\'ve listened to');
     }
   }

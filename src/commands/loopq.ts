@@ -25,7 +25,10 @@ export default class implements Command {
 
     player.queueLoop = !player.queueLoop;
     player.songLoop = false;
-    if (player.queueLoop) await msg.channel.send('the wheels on the queue go round n\' round');
-    else await msg.channel.send('last stop! everyone out');
+    if (player.queueLoop) {
+      await msg.channel.send('the wheels on the queue go round n\' round');
+    } else {
+      await msg.channel.send('last stop! everyone out');
+    }
   }
 }

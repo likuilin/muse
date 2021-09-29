@@ -53,8 +53,15 @@ export default class implements Command {
       description += ' ';
       description += `\`[${prettyTime(player.getPosition())}/${currentlyPlaying.isLive ? 'live' : prettyTime(currentlyPlaying.length)}]\``;
       description += ' 🔉';
-      if (player.songLoop) description += ' 🔂';
-      if (player.queueLoop) description += ' 🔁';
+
+      if (player.songLoop) {
+        description += ' 🔂';
+      }
+
+      if (player.queueLoop) {
+        description += ' 🔁';
+      }
+
       description += player.isQueueEmpty() ? '' : '\n\n**Next up:**';
 
       embed.setDescription(description);

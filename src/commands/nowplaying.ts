@@ -2,11 +2,9 @@ import {Message, MessageEmbed} from 'discord.js';
 import {TYPES} from '../types';
 import {inject, injectable} from 'inversify';
 import PlayerManager from '../managers/player';
-import {STATUS} from '../services/player';
-import Player from '../services/player';
+import Player, {STATUS} from '../services/player';
 import Command from '.';
 import getProgressBar from '../utils/get-progress-bar';
-import errorMsg from '../utils/error-msg';
 import {prettyTime} from '../utils/time';
 import getYouTubeID from 'get-youtube-id';
 
@@ -24,12 +22,6 @@ export default class NowPlaying implements Command {
     this.playerManager = playerManager;
   }
 
-  public async execute(msg: Message, args: string []): Promise<void> {
-    const player = this.playerManager.get(msg.guild!.id);
-
-    await msg.channel.send(NowPlaying.buildRadio(player));
-  }
-
   public static buildRadio(player: Player) {
     const currentlyPlaying = player.getCurrent();
 
@@ -45,8 +37,14 @@ export default class NowPlaying implements Command {
       description += ' ';
       description += `\`[${prettyTime(player.getPosition())}/${currentlyPlaying.isLive ? 'live' : prettyTime(currentlyPlaying.length)}]\``;
       description += ' 🔉';
-      if (player.songLoop) description += ' 🔂';
-      if (player.queueLoop) description += ' 🔁';
+
+      if (player.songLoop) {
+        description += ' 🔂';
+      }
+
+      if (player.queueLoop) {
+        description += ' 🔁';
+      }
 
       embed.setDescription(description);
 
@@ -55,8 +53,14 @@ export default class NowPlaying implements Command {
       embed.setFooter(footer);
 
       return embed;
-    } else {
-      return 'no thoughts, queue empty';
     }
+
+    return 'no thoughts, queue empty';
+  }
+
+  public async execute(msg: Message): Promise<void> {
+    const player = this.playerManager.get(msg.guild!.id);
+
+    await msg.channel.send(NowPlaying.buildRadio(player));
   }
 }

@@ -1,4 +1,4 @@
-import {TextChannel, VoiceConnection, VoiceChannel, StreamDispatcher} from 'discord.js';
+import {VoiceConnection, VoiceChannel, StreamDispatcher} from 'discord.js';
 import {promises as fs, createWriteStream} from 'fs';
 import {Readable, PassThrough} from 'stream';
 import path from 'path';
@@ -30,7 +30,7 @@ export enum STATUS {
 export default class {
   public status = STATUS.PAUSED;
   public voiceConnection: VoiceConnection | null = null;
-  public scrobbleAnnounce: (() => void) | null = null;
+  public scrobbleAnnounce: (() => Promise<void>) | null = null;
   public songLoop = false;
   public queueLoop = false;
   private queue: QueuedSong[] = [];
@@ -90,6 +90,9 @@ export default class {
 
     this.attachListeners();
     this.startTrackingPosition(positionSeconds);
+    if (this.scrobbleAnnounce) {
+      await this.scrobbleAnnounce();
+    }
 
     this.status = STATUS.PLAYING;
   }
@@ -119,6 +122,10 @@ export default class {
         this.dispatcher.resume();
         this.status = STATUS.PLAYING;
         this.startTrackingPosition();
+        if (this.scrobbleAnnounce) {
+          await this.scrobbleAnnounce();
+        }
+
         return;
       }
 
@@ -139,9 +146,16 @@ export default class {
 
       if (currentSong.url === this.lastSongURL) {
         this.startTrackingPosition();
+        if (this.scrobbleAnnounce) {
+          await this.scrobbleAnnounce();
+        }
       } else {
         // Reset position counter
         this.startTrackingPosition(0);
+        if (this.scrobbleAnnounce) {
+          await this.scrobbleAnnounce();
+        }
+
         this.lastSongURL = currentSong.url;
       }
     } catch (error: unknown) {
@@ -258,7 +272,6 @@ export default class {
       } catch (error: unknown) {
         throw error;
       }
-
     } else {
       const shuffledSongs = shuffle(this.queue.slice(this.queuePosition + 1));
       this.queue = [...this.queue.slice(0, this.queuePosition + 1), ...shuffledSongs];
@@ -432,7 +445,6 @@ export default class {
   }
 
   private startTrackingPosition(initalPosition?: number): void {
-    if (this.scrobbleAnnounce) this.scrobbleAnnounce();
     if (initalPosition !== undefined) {
       this.positionInSeconds = initalPosition;
     }

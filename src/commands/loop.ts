@@ -25,7 +25,10 @@ export default class implements Command {
 
     player.songLoop = !player.songLoop;
     player.queueLoop = false;
-    if (player.songLoop) await msg.channel.send('spin your pardner round n\' round');
-    else await msg.channel.send('let \'er down loosely');
+    if (player.songLoop) {
+      await msg.channel.send('spin your pardner round n\' round');
+    } else {
+      await msg.channel.send('let \'er down loosely');
+    }
   }
 }
