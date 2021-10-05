@@ -299,6 +299,9 @@ export default class {
 
     this.queuePosition = 0;
     this.queue = [];
+    this.scrobbleAnnounce = null;
+    this.songLoop = false;
+    this.queueLoop = false;
   }
 
   removeCurrent(): void {

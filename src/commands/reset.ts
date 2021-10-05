@@ -10,7 +10,7 @@ export default class implements Command {
   public name = 'reset';
   public aliases = ['destroy', 'leave', 'terminate', 'stop'];
   public examples = [
-    ['reset', 'disconnects player and deletes entire queue']
+    ['reset', 'disconnects player and deletes entire queue and clears scrobble and loop flags']
   ];
 
   public requiresVC = true;
@@ -31,6 +31,6 @@ export default class implements Command {
 
     player.reset();
 
-    await msg.channel.send('u betcha it\'s clearer than a field after a fresh harvest');
+    await msg.channel.send('“I love to soar in the boundless sky. In the vast emptiness of the blue, my soul rejoices listening to the soundless music of the wind.”\n― Banani Ray, World Peace: The Voice of a Mountain Bird');
   }
 }
