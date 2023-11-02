@@ -29,6 +29,6 @@ export default class implements Command {
 
     player.loopCurrentSong = !player.loopCurrentSong;
 
-    await interaction.reply((player.loopCurrentSong ? 'looped :)' : 'let \'er down loosely'));
+    await interaction.reply((player.loopCurrentSong ? 'spin your pardner round n\' round' : 'let \'er down loosely'));
   }
 }
